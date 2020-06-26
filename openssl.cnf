@@ -1,0 +1,78 @@
+# vim: set filetype=dosini:
+
+[ default ]
+HOME                        = .
+extensions                  = x509_extensions_${certificate::extensions}
+
+[ req ]
+string_mask                 = utf8only
+encrypt_key                 = no
+prompt                      = no
+distinguished_name          = request_subject
+req_extensions              = req_extensions_${certificate::extensions}
+x509_extensions             = x509_extensions_${certificate::extensions}
+
+[ x509_extensions_ca ]
+basicConstraints            = critical, CA:TRUE
+keyUsage                    = critical, keyCertSign, cRLSign, digitalSignature
+subjectKeyIdentifier        = hash
+authorityKeyIdentifier      = keyid:always, issuer
+
+[ x509_extensions_intermediate ]
+basicConstraints            = critical, CA:TRUE, pathlen:0
+keyUsage                    = critical, keyCertSign, cRLSign, digitalSignature
+subjectKeyIdentifier        = hash
+authorityKeyIdentifier      = keyid:always, issuer
+
+[ x509_extensions_server ]
+basicConstraints            = critical, CA:FALSE
+keyUsage                    = critical, keyEncipherment, digitalSignature
+extendedKeyUsage            = serverAuth
+subjectAltName              = @alternative_names
+subjectKeyIdentifier        = hash
+authorityKeyIdentifier      = keyid, issuer
+
+[ x509_extensions_client ]
+basicConstraints            = critical, CA:FALSE
+keyUsage                    = critical, keyEncipherment, digitalSignature
+extendedKeyUsage            = clientAuth
+subjectKeyIdentifier        = hash
+authorityKeyIdentifier      = keyid, issuer
+
+[ x509_extensions_personal ]
+basicConstraints            = critical, CA:FALSE
+keyUsage                    = critical, nonRepudiation, keyEncipherment, digitalSignature
+extendedKeyUsage            = clientAuth, emailProtection
+subjectAltName              = @alternative_names
+subjectKeyIdentifier        = hash
+authorityKeyIdentifier      = keyid,issuer
+
+[ req_extensions_ca ]
+basicConstraints            = ${x509_extensions_ca::basicConstraints}
+keyUsage                    = ${x509_extensions_ca::keyUsage}
+subjectKeyIdentifier        = hash
+
+[ req_extensions_intermediate ]
+basicConstraints            = ${x509_extensions_intermediate::basicConstraints}
+keyUsage                    = ${x509_extensions_intermediate::keyUsage}
+subjectKeyIdentifier        = hash
+
+[ req_extensions_server ]
+basicConstraints            = ${x509_extensions_server::basicConstraints}
+keyUsage                    = ${x509_extensions_server::keyUsage}
+extendedKeyUsage            = ${x509_extensions_server::extendedKeyUsage}
+subjectAltName              = @alternative_names
+subjectKeyIdentifier        = hash
+
+[ req_extensions_client ]
+basicConstraints            = ${x509_extensions_client::basicConstraints}
+keyUsage                    = ${x509_extensions_client::keyUsage}
+extendedKeyUsage            = ${x509_extensions_client::extendedKeyUsage}
+subjectKeyIdentifier        = hash
+
+[ req_extensions_personal ]
+basicConstraints            = ${x509_extensions_personal::basicConstraints}
+keyUsage                    = ${x509_extensions_personal::keyUsage}
+extendedKeyUsage            = ${x509_extensions_personal::extendedKeyUsage}
+subjectAltName              = @alternative_names
+subjectKeyIdentifier        = hash
