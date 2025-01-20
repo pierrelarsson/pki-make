@@ -51,37 +51,37 @@
 ```
 make
 ```
-> profile = ca
-> CN = Root CA
+> profile = ca  
+> CN = Root CA  
 
 ## Generate an Intermediate CA
 ```
 make DAYS=1825 NUMBITS=4096 intermediate.crt
 ```
-> profile = intermediate
-> CN = Intermediate CA
+> profile = intermediate  
+> CN = Intermediate CA  
 
 ## Generate a Server certificate signed by the Root CA
 ```
 make servername.example.com.crt
 ```
-> profile = server
-> CN = servername.example.com
-> DNS.1 = servername.example.com
+> profile = server  
+> CN = servername.example.com  
+> DNS.1 = servername.example.com  
 
 ## Generate a Server certificate signed by the Intermediate CA
 ```
 make CA=intermediate servername2.example.com.crt
 ```
-> profile = server
-> CN = servername2.example.com
-> DNS.1 = servername2.example.com
+> profile = server  
+> CN = servername2.example.com  
+> DNS.1 = servername2.example.com  
 
 ## Sign a CSR from a third-party
 ```
 cp /absolute/path/to/xxx.csr 3rdparty.example.com.csr
 make 3rdparty.example.com.crt
 ```
-> profile = server
-> CN = 3rdparty.example.com
-> DNS.1 = 3rdparty.example.com
+> profile = server  
+> CN = 3rdparty.example.com  
+> DNS.1 = 3rdparty.example.com  
