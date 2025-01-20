@@ -1,78 +1,85 @@
 # vim: set filetype=dosini:
 
 [ default ]
-HOME                        = .
-extensions                  = x509_extensions_${certificate::extensions}
+HOME                    = .
+extensions              = x509_${profile}
 
 [ req ]
-string_mask                 = utf8only
-encrypt_key                 = no
-prompt                      = no
-distinguished_name          = request_subject
-req_extensions              = req_extensions_${certificate::extensions}
-x509_extensions             = x509_extensions_${certificate::extensions}
+prompt                  = no
+utf8                    = yes
+string_mask             = utf8only
+distinguished_name      = subject
+attributes              = attributes
+req_extensions          = req_${profile}
+x509_extensions         = x509_${profile}
 
-[ x509_extensions_ca ]
-basicConstraints            = critical, CA:TRUE
-keyUsage                    = critical, keyCertSign, cRLSign, digitalSignature
-subjectKeyIdentifier        = hash
-authorityKeyIdentifier      = keyid:always, issuer
+[ subreq ]
+prompt                  = ${req::prompt}
+utf8                    = ${req::utf8}
+string_mask             = ${req::string_mask}
+distinguished_name      = ${req::distinguished_name}
 
-[ x509_extensions_intermediate ]
-basicConstraints            = critical, CA:TRUE, pathlen:0
-keyUsage                    = critical, keyCertSign, cRLSign, digitalSignature
-subjectKeyIdentifier        = hash
-authorityKeyIdentifier      = keyid:always, issuer
+[ x509_ca ]
+basicConstraints        = critical, CA:TRUE
+keyUsage                = critical, keyCertSign, cRLSign
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always, issuer
 
-[ x509_extensions_server ]
-basicConstraints            = critical, CA:FALSE
-keyUsage                    = critical, keyEncipherment, digitalSignature
-extendedKeyUsage            = serverAuth
-subjectAltName              = @alternative_names
-subjectKeyIdentifier        = hash
-authorityKeyIdentifier      = keyid, issuer
+[ x509_intermediate ]
+basicConstraints        = critical, CA:TRUE, pathlen:0
+keyUsage                = critical, keyCertSign, cRLSign
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid:always, issuer
 
-[ x509_extensions_client ]
-basicConstraints            = critical, CA:FALSE
-keyUsage                    = critical, keyEncipherment, digitalSignature
-extendedKeyUsage            = clientAuth
-subjectKeyIdentifier        = hash
-authorityKeyIdentifier      = keyid, issuer
+[ x509_server ]
+subjectAltName          = @san
+basicConstraints        = critical, CA:FALSE
+keyUsage                = critical, keyEncipherment, digitalSignature
+extendedKeyUsage        = serverAuth
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid, issuer
 
-[ x509_extensions_personal ]
-basicConstraints            = critical, CA:FALSE
-keyUsage                    = critical, nonRepudiation, keyEncipherment, digitalSignature
-extendedKeyUsage            = clientAuth, emailProtection
-subjectAltName              = @alternative_names
-subjectKeyIdentifier        = hash
-authorityKeyIdentifier      = keyid,issuer
+[ x509_client ]
+basicConstraints        = critical, CA:FALSE
+keyUsage                = critical, keyEncipherment, digitalSignature
+extendedKeyUsage        = clientAuth
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid, issuer
 
-[ req_extensions_ca ]
-basicConstraints            = ${x509_extensions_ca::basicConstraints}
-keyUsage                    = ${x509_extensions_ca::keyUsage}
-subjectKeyIdentifier        = hash
+[ x509_smime ]
+subjectAltName          = @san
+basicConstraints        = critical, CA:FALSE
+keyUsage                = critical, nonRepudiation, keyEncipherment, dataEncipherment, digitalSignature
+extendedKeyUsage        = emailProtection
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid, issuer
 
-[ req_extensions_intermediate ]
-basicConstraints            = ${x509_extensions_intermediate::basicConstraints}
-keyUsage                    = ${x509_extensions_intermediate::keyUsage}
-subjectKeyIdentifier        = hash
+[ req_ca ]
+basicConstraints        = ${x509_ca::basicConstraints}
+keyUsage                = ${x509_ca::keyUsage}
+subjectKeyIdentifier    = ${x509_ca::subjectKeyIdentifier}
 
-[ req_extensions_server ]
-basicConstraints            = ${x509_extensions_server::basicConstraints}
-keyUsage                    = ${x509_extensions_server::keyUsage}
-extendedKeyUsage            = ${x509_extensions_server::extendedKeyUsage}
-subjectAltName              = @alternative_names
-subjectKeyIdentifier        = hash
+[ req_intermediate ]
+basicConstraints        = ${x509_intermediate::basicConstraints}
+keyUsage                = ${x509_intermediate::keyUsage}
+subjectKeyIdentifier    = ${x509_intermediate::subjectKeyIdentifier}
 
-[ req_extensions_client ]
-basicConstraints            = ${x509_extensions_client::basicConstraints}
-keyUsage                    = ${x509_extensions_client::keyUsage}
-extendedKeyUsage            = ${x509_extensions_client::extendedKeyUsage}
-subjectKeyIdentifier        = hash
+[ req_server ]
+subjectAltName          = ${x509_server::subjectAltName}
+basicConstraints        = ${x509_server::basicConstraints}
+keyUsage                = ${x509_server::keyUsage}
+extendedKeyUsage        = ${x509_server::extendedKeyUsage}
+subjectKeyIdentifier    = ${x509_server::subjectKeyIdentifier}
 
-[ req_extensions_personal ]
-basicConstraints            = ${x509_extensions_personal::basicConstraints}
-keyUsage                    = ${x509_extensions_personal::keyUsage}
-extendedKeyUsage            = ${x509_extensions_personal::extendedKeyUsage}
-subjectAltName              = @alternative_names
-subjectKeyIdentifier        = hash
+[ req_client ]
+basicConstraints        = ${x509_client::basicConstraints}
+keyUsage                = ${x509_client::keyUsage}
+extendedKeyUsage        = ${x509_client::extendedKeyUsage}
+subjectKeyIdentifier    = ${x509_client::subjectKeyIdentifier}
+
+[ req_smime ]
+subjectAltName          = ${x509_smime::subjectAltName}
+basicConstraints        = ${x509_smime::basicConstraints}
+keyUsage                = ${x509_smime::keyUsage}
+extendedKeyUsage        = ${x509_smime::extendedKeyUsage}
+subjectKeyIdentifier    = ${x509_smime::subjectKeyIdentifier}

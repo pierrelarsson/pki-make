@@ -1,0 +1,17 @@
+*.key
+*.rsa
+*.ec
+*.csr
+*.subreq
+*.crt
+*.cer
+*.config
+*.pem
+*.pub
+*.p12
+*.pfx
+*.pkcs12
+*.jks
+*.modulus
+*.txt
+*.enc

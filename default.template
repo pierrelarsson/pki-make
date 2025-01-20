@@ -1,0 +1,24 @@
+# vim: set filetype=dosini:
+
+profile             = ca|intermediate|server|client|smime
+
+[ subject ]
+#C                   = Country Name (2 letter code)
+#ST                  = State or Province Name (full name)
+#L                   = Locality Name (eg, city)
+#O                   = Organization Name (eg, company)
+#OU                  = Organizational Unit Name (eg, section)
+CN                  = Common Name (eg, your name or your server's hostname)
+#emailAddress        = Email Address
+
+[ attributes ]
+#challengePassword   = changeit
+#unstructuredName    = An optional name
+
+# subject alternative name is only applicable for the server and smime profile(s)
+[ san ]
+#DNS.1               = Common Name (eg, your name or your server's hostname)
+#IP.1                = 127.0.0.1
+#email.1             = Email Address
+
+.include openssl.cnf
